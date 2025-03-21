@@ -1,0 +1,55 @@
+cells:
+  - kind: 2
+    languageId: sql
+    value: |
+      CREATE TABLE Test (
+          VINT INT,
+          VDT DATETIME
+      );
+  - kind: 2
+    languageId: sql
+    value: >
+      CREATE OR ALTER PROCEDURE sp_random_insert
+
+      AS
+
+      BEGIN
+          DECLARE @i INT = 30000
+
+          SET NOCOUNT ON
+          WHILE @i > 0 BEGIN
+              INSERT INTO dbo.Test 
+              VALUES (CAST(RAND() * 100000 AS INT), GETDATE() + CAST(RAND() * 100000 AS INT));
+              SET @i = @i - 1;
+          END
+          SET NOCOUNT OFF
+      END;
+  - kind: 2
+    languageId: sql
+    value: |
+      EXECUTE dbo.sp_random_insert;
+  - kind: 2
+    languageId: sql
+    value: |
+      SET SHOWPLAN_ALL ON;
+  - kind: 2
+    languageId: sql
+    value: |
+      SET STATISTICS TIME ON;
+  - kind: 2
+    languageId: sql
+    value: |
+      SELECT * FROM dbo.Test t
+      WHERE
+          t.VINT > 97000 AND
+          t.VDT >= '2026-01-01';
+  - kind: 2
+    languageId: sql
+    value: |
+      -- HEAP | 14ms | 
+metadata:
+  conn:
+    id: 0VA1TWMNhjWYZ14V1jMgM
+    name: MSSQL
+  database: LESSON1
+  schema: dbo
