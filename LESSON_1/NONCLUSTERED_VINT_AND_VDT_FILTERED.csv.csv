@@ -1,0 +1,7 @@
+"StmtText","StmtId","NodeId","Parent","PhysicalOp","LogicalOp","Argument","DefinedValues","EstimateRows","EstimateIO","EstimateCPU","AvgRowSize","TotalSubtreeCost","OutputList","Warnings","Type","Parallel","EstimateExecutions"
+"SELECT VINT, VDT FROM dbo.Test t
+WITH (INDEX(idx_test_nonclustered_vint_and_vdt_filtered))
+WHERE
+    t.VINT > 97000 AND
+    t.VDT >= '2026-01-01';","1","1","0","(null)","(null)","1","(null)","892","(null)","(null)","(null)","0.004263199865818024","(null)","(null)","SELECT","false","(null)"
+"  |--Index Scan(OBJECT:([LESSON1].[dbo].[Test].[idx_test_nonclustered_vint_and_vdt_filtered] AS [t]))","1","2","1","Index Scan","Index Scan","OBJECT:([LESSON1].[dbo].[Test].[idx_test_nonclustered_vint_and_vdt_filtered] AS [t]), FORCEDINDEX","[t].[VINT], [t].[VDT]","892","0.0031250000465661287","0.0011382000520825386","19","0.004263199865818024","[t].[VINT], [t].[VDT]","(null)","PLAN_ROW","false","1"

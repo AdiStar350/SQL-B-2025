@@ -39,14 +39,188 @@ cells:
   - kind: 2
     languageId: sql
     value: |
+      SET SHOWPLAN_ALL OFF;
+  - kind: 2
+    languageId: sql
+    value: |
       SELECT * FROM dbo.Test t
       WHERE
           t.VINT > 97000 AND
           t.VDT >= '2026-01-01';
+      -- HEAP | 14ms | PLAN -> HEAP.csv
   - kind: 2
     languageId: sql
     value: |
-      -- HEAP | 14ms | 
+      CREATE CLUSTERED INDEX idx_test_clustered_vint
+      ON Test(VINT);
+  - kind: 2
+    languageId: sql
+    value: |
+      SET SHOWPLAN_ALL ON;
+  - kind: 2
+    languageId: sql
+    value: |
+      SET SHOWPLAN_ALL OFF;
+  - kind: 2
+    languageId: sql
+    value: |
+      SELECT * FROM dbo.Test t
+      WITH (INDEX(idx_test_clustered_vint))
+      WHERE
+          t.VINT > 97000 AND
+          t.VDT >= '2026-01-01';
+      -- CLUSTERED VINT | 9ms | PLAN -> CLUSTERED.csv
+  - kind: 2
+    languageId: sql
+    value: |
+      DROP INDEX Test.idx_test_clustered_vint;
+  - kind: 2
+    languageId: sql
+    value: |
+      CREATE NONCLUSTERED INDEX idx_test_nonclustered_vdt
+      ON Test(VDT);
+  - kind: 2
+    languageId: sql
+    value: |
+      SET SHOWPLAN_ALL ON;
+  - kind: 2
+    languageId: sql
+    value: |
+      SET SHOWPLAN_ALL OFF;
+  - kind: 2
+    languageId: sql
+    value: |
+      SELECT * FROM dbo.Test t
+      WITH (INDEX(idx_test_nonclustered_vdt))
+      WHERE
+          t.VINT > 97000 AND
+          t.VDT >= '2026-01-01';
+      -- NONCLUSTERED VDT | 20ms | PLAN -> NONCLUSTERED_VDT.csv
+  - kind: 2
+    languageId: sql
+    value: |
+      DROP INDEX Test.idx_test_nonclustered_vdt;
+  - kind: 2
+    languageId: sql
+    value: |
+      CREATE NONCLUSTERED INDEX idx_test_nonclustered_vint
+      ON Test(VINT);
+  - kind: 2
+    languageId: sql
+    value: |
+      SET SHOWPLAN_ALL ON;
+  - kind: 2
+    languageId: sql
+    value: |
+      SET SHOWPLAN_ALL OFF;
+  - kind: 2
+    languageId: sql
+    value: |
+      SELECT * FROM dbo.Test t
+      WITH (INDEX(idx_test_nonclustered_vint))
+      WHERE
+          t.VINT > 97000 AND
+          t.VDT >= '2026-01-01';
+      -- NONCLUSTERED VINT | 20ms | PLAN -> NONCLUSTERED_VINT.csv
+  - kind: 2
+    languageId: sql
+    value: |
+      DROP INDEX Test.idx_test_nonclustered_vint;
+  - kind: 2
+    languageId: sql
+    value: |
+      CREATE CLUSTERED INDEX idx_test_clustered_vint_and_vdt
+      ON Test(VINT, VDT);
+  - kind: 2
+    languageId: sql
+    value: |
+      SET SHOWPLAN_ALL ON;
+  - kind: 2
+    languageId: sql
+    value: |
+      SET SHOWPLAN_ALL OFF;
+  - kind: 2
+    languageId: sql
+    value: |
+      SELECT * FROM dbo.Test t
+      WITH (INDEX(idx_test_clustered_vint_and_vdt))
+      WHERE
+          t.VINT > 97000 AND
+          t.VDT >= '2026-01-01';
+      -- CLUSTERED VINT + VDT | 7ms | PLAN -> CLUSTERED_VINT_AND_VDT.csv
+  - kind: 2
+    languageId: sql
+    value: |
+      DROP INDEX Test.idx_test_clustered_vint_and_vdt;
+  - kind: 2
+    languageId: sql
+    value: |
+      CREATE NONCLUSTERED INDEX idx_test_nonclustered_vint_and_vdt_filtered
+      ON Test(VINT, VDT)
+      WHERE
+          Test.VINT > 97000 AND
+          Test.VDT >= '2026-01-01';
+  - kind: 2
+    languageId: sql
+    value: |
+      SET SHOWPLAN_ALL ON;
+  - kind: 2
+    languageId: sql
+    value: |
+      SET SHOWPLAN_ALL OFF;
+  - kind: 2
+    languageId: sql
+    value: >
+      SELECT * FROM dbo.Test t
+
+      WITH (INDEX(idx_test_nonclustered_vint_and_vdt_filtered))
+
+      WHERE
+          t.VINT > 97000 AND
+          t.VDT >= '2026-01-01';
+      -- NONCLUSTERED VINT + VDT FILTERED | 10ms | PLAN ->
+      NONCLUSTERED_VINT_AND_VDT_FILTERED.csv
+  - kind: 2
+    languageId: sql
+    value: |
+      DROP INDEX Test.idx_test_nonclustered_vint_and_vdt_filtered;
+  - kind: 2
+    languageId: sql
+    value: |
+      ALTER TABLE dbo.Test
+      ADD VDT_YEAR AS YEAR(VDT) PERSISTED;
+  - kind: 2
+    languageId: sql
+    value: |
+      CREATE NONCLUSTERED INDEX idx_test_year_check
+      ON Test(VDT_YEAR);
+  - kind: 2
+    languageId: sql
+    value: |
+      SET SHOWPLAN_ALL ON;
+  - kind: 2
+    languageId: sql
+    value: |
+      SET SHOWPLAN_ALL OFF;
+  - kind: 2
+    languageId: sql
+    value: >
+      SELECT * FROM dbo.Test t
+
+      WHERE
+          t.VINT > 97000 AND
+          t.VDT_YEAR >= 2026;
+      -- CLUSTERED VINT, NONCLUSTERED VDT_YEAR | 10ms | PLAN ->
+      CLUSTERED_VINT_NONCLUSTERED_VDT_YEAR.csv
+  - kind: 2
+    languageId: sql
+    value: |
+      DROP INDEX Test.idx_test_year_check;
+  - kind: 2
+    languageId: sql
+    value: |
+      ALTER TABLE dbo.Test
+      DROP COLUMN VDT_YEAR;
 metadata:
   conn:
     id: 0VA1TWMNhjWYZ14V1jMgM

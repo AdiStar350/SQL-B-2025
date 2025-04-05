@@ -1,0 +1,6 @@
+"StmtText","StmtId","NodeId","Parent","PhysicalOp","LogicalOp","Argument","DefinedValues","EstimateRows","EstimateIO","EstimateCPU","AvgRowSize","TotalSubtreeCost","OutputList","Warnings","Type","Parallel","EstimateExecutions"
+"SELECT * FROM dbo.Test t
+WHERE
+    t.VINT > 97000 AND
+    t.VDT >= '2026-01-01';","1","1","0","(null)","(null)","1","(null)","895.869140625","(null)","(null)","(null)","0.09702274203300476","(null)","(null)","SELECT","false","(null)"
+"  |--Table Scan(OBJECT:([LESSON1].[dbo].[Test] AS [t]), WHERE:([LESSON1].[dbo].[Test].[VINT] as [t].[VINT]>[@1] AND [LESSON1].[dbo].[Test].[VDT] as [t].[VDT]>=CONVERT_IMPLICIT(datetime,[@2],0)))","1","2","1","Table Scan","Table Scan","OBJECT:([LESSON1].[dbo].[Test] AS [t]), WHERE:([LESSON1].[dbo].[Test].[VINT] as [t].[VINT]>[@1] AND [LESSON1].[dbo].[Test].[VDT] as [t].[VDT]>=CONVERT_IMPLICIT(datetime,[@2],0))","[t].[VINT], [t].[VDT]","895.869140625","0.0639442428946495","0.033078499138355255","19","0.09702274203300476","[t].[VINT], [t].[VDT]","(null)","PLAN_ROW","false","1"

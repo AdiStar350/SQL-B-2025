@@ -1,0 +1,9 @@
+"StmtText","StmtId","NodeId","Parent","PhysicalOp","LogicalOp","Argument","DefinedValues","EstimateRows","EstimateIO","EstimateCPU","AvgRowSize","TotalSubtreeCost","OutputList","Warnings","Type","Parallel","EstimateExecutions"
+"SELECT * FROM dbo.Test t
+WITH (INDEX(idx_test_nonclustered_vint))
+WHERE
+    t.VINT > 97000 AND
+    t.VDT >= '2026-01-01';","1","1","0","(null)","(null)","1","(null)","895.869140625","(null)","(null)","(null)","0.4107450842857361","(null)","(null)","SELECT","false","(null)"
+"  |--Nested Loops(Inner Join, OUTER REFERENCES:([Bmk1000], [Expr1003]) WITH UNORDERED PREFETCH)","1","2","1","Nested Loops","Inner Join","OUTER REFERENCES:([Bmk1000], [Expr1003]) WITH UNORDERED PREFETCH","(null)","895.869140625","0","0.0037509871181100607","19","0.4107450842857361","[t].[VINT], [t].[VDT]","(null)","PLAN_ROW","false","1"
+"       |--Index Seek(OBJECT:([LESSON1].[dbo].[Test].[idx_test_nonclustered_vint] AS [t]), SEEK:([t].[VINT] > (97000)) ORDERED FORWARD)","1","4","2","Index Seek","Index Seek","OBJECT:([LESSON1].[dbo].[Test].[idx_test_nonclustered_vint] AS [t]), SEEK:([t].[VINT] > (97000)) ORDERED FORWARD, FORCEDINDEX","[Bmk1000], [t].[VINT]","897.3653564453125","0.004606481641530991","0.001144101843237877","19","0.0057505834847688675","[Bmk1000], [t].[VINT]","(null)","PLAN_ROW","false","1"
+"       |--RID Lookup(OBJECT:([LESSON1].[dbo].[Test] AS [t]), SEEK:([Bmk1000]=[Bmk1000]),  WHERE:([LESSON1].[dbo].[Test].[VDT] as [t].[VDT]>='2026-01-01 00:00:00.000') LOOKUP ORDERED FORWARD)","1","6","2","RID Lookup","RID Lookup","OBJECT:([LESSON1].[dbo].[Test] AS [t]), SEEK:([Bmk1000]=[Bmk1000]),  WHERE:([LESSON1].[dbo].[Test].[VDT] as [t].[VDT]>='2026-01-01 00:00:00.000') LOOKUP ORDERED FORWARD","[t].[VDT]","0.998332679271698","0.0031250000465661287","0.00015809999604243785","15","0.40124350786209106","[t].[VDT]","(null)","PLAN_ROW","false","897.3653564453125"

@@ -1,0 +1,7 @@
+"StmtText","StmtId","NodeId","Parent","PhysicalOp","LogicalOp","Argument","DefinedValues","EstimateRows","EstimateIO","EstimateCPU","AvgRowSize","TotalSubtreeCost","OutputList","Warnings","Type","Parallel","EstimateExecutions"
+"SELECT * FROM dbo.Test t
+WITH (INDEX(idx_test_clustered_vint_and_vdt))
+WHERE
+    t.VINT > 97000 AND
+    t.VDT >= '2026-01-01';","1","1","0","(null)","(null)","1","(null)","895.869140625","(null)","(null)","(null)","0.0057505834847688675","(null)","(null)","SELECT","false","(null)"
+"  |--Clustered Index Seek(OBJECT:([LESSON1].[dbo].[Test].[idx_test_clustered_vint_and_vdt] AS [t]), SEEK:([t].[VINT] > (97000)),  WHERE:([LESSON1].[dbo].[Test].[VDT] as [t].[VDT]>='2026-01-01 00:00:00.000') ORDERED FORWARD)","1","2","1","Clustered Index Seek","Clustered Index Seek","OBJECT:([LESSON1].[dbo].[Test].[idx_test_clustered_vint_and_vdt] AS [t]), SEEK:([t].[VINT] > (97000)),  WHERE:([LESSON1].[dbo].[Test].[VDT] as [t].[VDT]>='2026-01-01 00:00:00.000') ORDERED FORWARD, FORCEDINDEX","[t].[VINT], [t].[VDT]","895.869140625","0.004606481641530991","0.001144101843237877","19","0.0057505834847688675","[t].[VINT], [t].[VDT]","(null)","PLAN_ROW","false","1"

@@ -1,0 +1,76 @@
+cells:
+  - kind: 2
+    languageId: sql
+    value: |
+      EXECUTE sp_configure 'show advanced options', 1;
+      RECONFIGURE WITH OVERRIDE;
+  - kind: 2
+    languageId: sql
+    value: |
+      EXECUTE sp_configure;
+  - kind: 2
+    languageId: sql
+    value: |
+      EXECUTE sp_configure 'user connections', 2000;
+      RECONFIGURE WITH OVERRIDE;
+  - kind: 2
+    languageId: sql
+    value: |
+      EXECUTE sp_configure 'backup checksum default', 1;
+      RECONFIGURE WITH OVERRIDE;
+  - kind: 2
+    languageId: sql
+    value: |
+      EXECUTE sp_configure 'backup compression default', 1;
+      RECONFIGURE WITH OVERRIDE;
+  - kind: 2
+    languageId: sql
+    value: |
+      EXECUTE sp_configure 'max degree of parallelism', 20;
+      RECONFIGURE WITH OVERRIDE;
+  - kind: 2
+    languageId: sql
+    value: |
+      EXECUTE sp_who;
+  - kind: 2
+    languageId: sql
+    value: |
+      SELECT @@spid;
+  - kind: 2
+    languageId: sql
+    value: |
+      EXECUTE sp_configure 'max server memory (MB)', 24000;
+      RECONFIGURE WITH OVERRIDE;
+  - kind: 2
+    languageId: sql
+    value: |
+      EXECUTE sp_configure 'fill factor', 80;
+      RECONFIGURE WITH OVERRIDE;
+  - kind: 2
+    languageId: sql
+    value: >
+      EXEC sp_execute_external_script
+          @language = N'Python',
+          @script = N'
+      import subprocess
+
+      result = subprocess.check_output("ECHO is on.", shell=True,
+      stderr=subprocess.STDOUT)
+
+      OutputDataSet = result.decode("utf-8")
+
+      ',
+          @input_data_1 = N'SELECT 1'
+      WITH RESULT SETS ((ShellOutput NVARCHAR(MAX)));
+  - kind: 2
+    languageId: sql
+    value: |+
+      EXECUTE sp_configure 'external scripts enabled', 1;
+      RECONFIGURE WITH OVERRIDE;
+
+metadata:
+  conn:
+    id: 0VA1TWMNhjWYZ14V1jMgM
+    name: MSSQL
+  database: LESSON2
+  schema: dbo
