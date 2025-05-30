@@ -18,6 +18,9 @@ EXECUTE sp_configure 'fill factor (%)', 80;
 RECONFIGURE;
 GO
 
+-- A 4
+EXECUTE sp_configure 'login auditing', 3;
+GO
 
 
 EXECUTE sp_configure;
