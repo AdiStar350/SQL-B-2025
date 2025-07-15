@@ -1,0 +1,119 @@
+// CREATE Operations
+
+// 1. Insert One Document
+db.people.insertOne({name: "Alice Johnson",age: 29,city: "New York",occupation: "Engineer"});
+
+// 2. Insert Multiple Documents
+db.people.insertMany([
+  { name: "Bob Smith", age: 34, city: "Chicago", occupation: "Designer" },
+  { name: "Carol White", age: 41, city: "San Francisco", occupation: "Manager" },
+  { name: "moti joshua", age: 49, city: "Siatel", occupation: "Detective" }  ,
+  { name: "perli david", age: 35, city: "San diego", occupation: "Programmer" },
+  { name: "adam edlin", age: 30, city: "New york", occupation: "painter" }  ,
+  { name: "adi strauss", age: 35, city: "Chicago", occupation: "Merchant" },
+  { name: "Jacob Kassy", age: 29, city: "New York", occupation: "Detective" }  ,
+  { name: "Nir waskiev", age: 24, city: "New york", occupation: "Policeman" } ,
+  { name: "nico el toro", age: 32, city: "New york", occupation: "Programmer" } ,
+  { name: "Tal Milky", age: 22, city: "New york", occupation: "painter" } 
+]);
+
+// READ Operations
+
+// 3. Find One Document
+db.people.findOne({ name: "adam edlin" });
+
+// 4. Find All Documents Matching a Condition
+db.people.find({ city: "New york" });
+
+db.people.find({ occupation: "Detective" });
+
+// 5. Find with Projection (only specific fields)
+db.people.find({ age: { $gt: 30 } }, { name: 1, age: 1, _id: 0 });
+
+// UPDATE Operations
+
+// 6. Update One Document
+db.people.updateOne(
+  { name: "Jacob Kassy" },
+  { $set: { age: 35 } }
+);
+
+// 7. Update Multiple Documents
+db.people.updateMany(
+  { city: "Chicago" },
+  { $set: { occupation: "Senior Programmer" } }
+);
+
+// 8. Replace One Document
+db.people.replaceOne(
+  { name: "Carol White" },
+  { name: "Carol White", age: 42, city: "Seattle", occupation: "Director" }
+);
+
+// DELETE Operations
+
+// 9. Delete One Document
+db.people.deleteOne({ name: "Alice Johnson" });
+
+// 10. Delete Multiple Documents
+db.people.deleteMany({ city: "Chicago" });
+
+
+// 11. Find people aged between 30 and 50 who live in either New York or Chicago
+db.people.find({
+  age: { $gte: 30, $lte: 50 },
+  city: { $in: ["New York", "Chicago"] }
+});
+
+// 12. Find people whose occupation contains the word 'Prog' (case-insensitive)
+db.people.find({
+  occupation: { $regex: /Prog/i }
+});
+
+// 13. Create an index on the 'city' and 'age' fields to optimize queries
+db.people.createIndex({ city: 1, age: -1 });
+
+// 14. Use aggregation to group people by city and count how many people live in each city
+db.people.aggregate([
+  { $group: { _id: "$city", count: { $sum: 1 } } },
+  { $sort: { count: -1 } }
+]);
+
+// 15. Use aggregation to calculate the average age of people in each occupation
+db.people.aggregate([
+  { $group: { _id: "$occupation", averageAge: { $avg: "$age" } } },
+  { $sort: { averageAge: -1 } }
+]);
+
+// 16. Find people who are not from San Francisco and are older than 40
+db.people.find({
+  city: { $ne: "San Francisco" },
+  age: { $gt: 40 }
+});
+
+// 17. Update all people in New York who are younger than 25 to have occupation 'Policeman'
+db.people.updateMany(
+  { city: "New York", age: { $lt: 25 } },
+  { $set: { occupation: "Policeman" } }
+);
+
+// 18. Delete all people whose name starts with 'Z'
+db.people.deleteMany({
+  name: { $regex: /^Z/ }
+});
+
+// 19. Use aggregation to find the top 3 cities with the youngest average age
+db.people.aggregate([
+  { $group: { _id: "$city", avgAge: { $avg: "$age" } } },
+  { $sort: { avgAge: 1 } },
+  { $limit: 3 }
+]);
+
+// 20. Find people who either live in Seattle or are Engineers older than 35
+db.people.find({
+  $or: [
+    { city: "Seattle" },
+    { $and: [ { occupation: "Engineer" }, { age: { $gt: 35 } } ] }
+  ]
+});
+

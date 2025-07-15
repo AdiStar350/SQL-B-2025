@@ -1,0 +1,51 @@
+-- Find examples
+db.unicorns.find({gender: 'm',
+weight: {$gt: 700}})
+
+//or (not quite the same thing, but for
+//demonstration purposes)
+
+db.unicorns.find({gender: {$ne: 'f'},
+weight: {$gte: 701}})
+
+// The $exists operator is used for matching the presence
+// or absence of a field, for example:
+
+db.unicorns.find({
+vampires: {$exists: false}})
+
+//should return a single document. The ‘$in’ operator is used 
+//for matching one of several values that we pass as an array
+
+db.unicorns.find({
+loves: {$in:['apple','orange']}})
+
+//If we want to OR rather than AND several conditions on different fields, 
+//we use the $or operator and assign to it an array of selectors we want or
+
+db.unicorns.find({gender: 'f',
+$or: [{loves: 'apple'}, {weight: {$lt: 500}}]})
+
+// The ObjectId which MongoDB generated for our _id field can be selected like so
+db.unicorns.find(
+{_id: ObjectId("TheObjectId")})
+
+// projection
+db.unicorns.find({}, {name: 1});
+
+// sorting
+//heaviest unicorns first
+db.unicorns.find().sort({weight: -1})
+
+//by unicorn name then vampire kills:
+db.unicorns.find().sort({name: 1, vampires: -1})	
+
+// paging
+Paging results can be accomplished via the limit and skip cursor methods. 
+//To get the second and third heaviest unicorn, we do:
+
+db.unicorns.find().sort({weight: -1}).limit(2).skip(1)
+
+// count directly on a collection
+db.unicorns.count({vampires: {$gt: 50}})
+db.unicorns.find({vampires: {$gt: 50}}).count()
